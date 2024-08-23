@@ -37,6 +37,13 @@ async function fetchAccountsData(code: string): Promise<Account[] | null> {
 export default async function Home({ searchParams }: { searchParams: { code?: string } }) {
   const accounts = searchParams.code ? await fetchAccountsData(searchParams.code) : null;
 
+  const handleLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || '';
+    const connectUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/webview/connect?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    window.location.href = connectUrl;
+  };
+
   return (
       <div>
         <h1>Welcome to Bank App</h1>
@@ -54,7 +61,10 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
                 ))}
               </div>
           ) : (
-              <p>No accounts found</p>
+              <div>
+                <p>No accounts found</p>
+                <button onClick={handleLogin}>Connect to Bank</button>
+              </div>
           )}
         </Suspense>
       </div>
