@@ -26,7 +26,6 @@ async function fetchAccountsData(code: string): Promise<Account[] | null> {
 
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
-    localStorage.setItem('accessToken', accessToken);
 
     const accountsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/accounts`, {
         headers: {
