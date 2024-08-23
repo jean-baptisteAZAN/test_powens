@@ -52,7 +52,7 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
                 {accounts ? (
                     <div className={'flex flex-col items-center justify-center'}>
                         <h2 className={'h2'}>
-                            Vous n'etes pas connecté
+                            Votre compte
                         </h2>
                         {accounts.map((account) => (
                             <div key={account.id}>
@@ -66,7 +66,9 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
                     </div>
                 ) : (
                     <div className={'flex flex-col items-center justify-center'}>
-                        <p>No accounts found</p>
+                        <p>
+                            Vous n&lsquo;etes pas connecté.
+                        </p>
                         <LoginButton/>
                     </div>
                 )}
