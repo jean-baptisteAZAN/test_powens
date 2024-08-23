@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import LoginButton from "@/components/LoginButton";
+import LogoutButton from "@/components/LogoutButton";
 import { ProgressRing } from '@skeletonlabs/skeleton-react';
 
 interface Account {
@@ -25,6 +26,7 @@ async function fetchAccountsData(code: string): Promise<Account[] | null> {
 
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
+    localStorage.setItem('accessToken', accessToken);
 
     const accountsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/accounts`, {
         headers: {
@@ -38,21 +40,34 @@ async function fetchAccountsData(code: string): Promise<Account[] | null> {
 
 export default async function Home({ searchParams }: { searchParams: { code?: string } }) {
     const accounts = searchParams.code ? await fetchAccountsData(searchParams.code) : null;
-
+    const accountSample = {
+        id: 1,
+        name: 'Compte courant',
+        formatted_balance: '1 000,00 €',
+        iban: 'FR76 3000 3030 3000 0300 0300 030',
+        type: 'current',
+    }
     return (
         <div className={'w-screen flex flex-col items-center justify-center'}>
             <Suspense fallback={<ProgressRing value={null} size="size-14" meterStroke="stroke-tertiary-600-400" trackStroke="stroke-tertiary-50-950" />}>
-                {accounts ? (
-                    <div>
-                        <h2>Accounts:</h2>
-                        {accounts.map((account) => (
-                            <div key={account.id}>
-                                <p>Name: {account.name}</p>
-                                <p>Balance: {account.formatted_balance}</p>
-                                <p>IBAN: {account.iban}</p>
-                                <p>Type: {account.type}</p>
+                {!accounts ? (
+                    <div className={'flex flex-col items-center justify-center'}>
+                        <h2 className={'h2'}>Accounts:</h2>
+                        {/*{accounts.map((account) => (*/}
+                        {/*    <div key={account.id}>*/}
+                        {/*        <p>Name: {account.name}</p>*/}
+                        {/*        <p>Balance: {account.formatted_balance}</p>*/}
+                        {/*        <p>IBAN: {account.iban}</p>*/}
+                        {/*        <p>Type: {account.type}</p>*/}
+                        {/*    </div>*/}
+                        {/*))}*/}
+                            <div>
+                                <p className={'h5'}>Name: {accountSample.name}</p>
+                                <p className={'h5'}>Balance: {accountSample.formatted_balance}</p>
+                                <p className={'h5'}>IBAN: {accountSample.iban}</p>
+                                <p className={'h5'}>Type: {accountSample.type}</p>
                             </div>
-                        ))}
+                        <LogoutButton/>
                     </div>
                 ) : (
                     <div className={'flex flex-col items-center justify-center'}>

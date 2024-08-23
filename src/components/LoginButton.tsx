@@ -1,5 +1,7 @@
 'use client';
 
+import {LogOutIcon} from "lucide-react";
+
 export default function LoginButton() {
     const handleLogin = () => {
         const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -9,8 +11,9 @@ export default function LoginButton() {
     };
 
     return (
-        <button type="button" onClick={handleLogin}  className="btn preset-filled">
-            Connect
+        <button type="button" onClick={handleLogin} className="btn preset-filled-primary-100-900">
+            <span><LogOutIcon/></span>
+            <span>Connect</span>
         </button>
     )
 }
