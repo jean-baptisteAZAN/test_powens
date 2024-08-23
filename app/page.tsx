@@ -1,63 +1,62 @@
-'use client';
+import { Suspense } from 'react';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+interface Account {
+  id: number;
+  name: string;
+  formatted_balance: string;
+  iban: string;
+  type: string;
+}
 
-export default function Home() {
-  const router = useRouter();
+async function fetchAccountsData(code: string): Promise<Account[] | null> {
+  const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/token/access`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: decodeURIComponent(code),
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+      client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
+    }),
+  });
 
-  const connectBank = () => {
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || '';
+  const tokenData = await tokenResponse.json();
+  const accessToken = tokenData.access_token;
 
-    const connectUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/webview/connect?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  const accountsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/accounts`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-    window.location.href = connectUrl;
-  };
+  const accountsData = await accountsResponse.json();
+  return accountsData.accounts || null;
+}
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get('code');
-
-    if (code) {
-      const fetchAccessToken = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/token/access`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            code: decodeURIComponent(code),
-            client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-            client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
-          }),
-        });
-
-        const data = await response.json();
-        const accessToken = data.access_token;
-
-        localStorage.setItem('accessToken', accessToken);
-        fetchAccounts(accessToken);
-      };
-
-      fetchAccessToken();
-    }
-  }, []);
-
-  const fetchAccounts = async (accessToken: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/accounts`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const accounts = await response.json();
-    console.log('Accounts:', accounts);
-  };
+export default async function Home({ searchParams }: { searchParams: { code?: string } }) {
+  const accounts = searchParams.code ? await fetchAccountsData(searchParams.code) : null;
 
   return (
       <div>
-        <button onClick={connectBank}>Connect to Bank</button>
+        <h1>Welcome to Bank App</h1>
+        <Suspense fallback={<div>Loading accounts...</div>}>
+          {accounts ? (
+              <div>
+                <h2>Accounts:</h2>
+                {accounts.map((account) => (
+                    <div key={account.id}>
+                      <p>Name: {account.name}</p>
+                      <p>Balance: {account.formatted_balance}</p>
+                      <p>IBAN: {account.iban}</p>
+                      <p>Type: {account.type}</p>
+                    </div>
+                ))}
+              </div>
+          ) : (
+              <p>No accounts found</p>
+          )}
+        </Suspense>
       </div>
   );
 }
