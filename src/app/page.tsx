@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import LoginButton from "@/components/LoginButton";
+import { ProgressRing } from '@skeletonlabs/skeleton-react';
 
 interface Account {
     id: number;
@@ -40,12 +41,7 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
 
     return (
         <div className={'w-screen flex flex-col items-center justify-center'}>
-            <h1 className="type-scale-9 font-bold uppercase text-9xl">
-          <span className="bg-gradient-radial from-tertiary-500 to-primary-500 box-decoration-clone bg-clip-text text-transparent">
-            ezBank
-         </span>
-            </h1>
-            <Suspense fallback={<div>Loading accounts...</div>}>
+            <Suspense fallback={<ProgressRing value={null} size="size-14" meterStroke="stroke-tertiary-600-400" trackStroke="stroke-tertiary-50-950" />}>
                 {accounts ? (
                     <div>
                         <h2>Accounts:</h2>
