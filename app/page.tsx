@@ -8,7 +8,7 @@ export default function Home() {
 
   const connectBank = () => {
     const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || '';
 
     const connectUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/webview/connect?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
@@ -44,7 +44,7 @@ export default function Home() {
     }
   }, []);
 
-  const fetchAccounts = async (accessToken) => {
+  const fetchAccounts = async (accessToken: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/accounts`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
