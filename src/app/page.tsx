@@ -50,23 +50,23 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
     return (
         <div className={'w-screen flex flex-col items-center justify-center'}>
             <Suspense fallback={<ProgressRing value={null} size="size-14" meterStroke="stroke-tertiary-600-400" trackStroke="stroke-tertiary-50-950" />}>
-                {!accounts ? (
+                {accounts ? (
                     <div className={'flex flex-col items-center justify-center'}>
                         <h2 className={'h2'}>Accounts:</h2>
-                        {/*{accounts.map((account) => (*/}
-                        {/*    <div key={account.id}>*/}
-                        {/*        <p>Name: {account.name}</p>*/}
-                        {/*        <p>Balance: {account.formatted_balance}</p>*/}
-                        {/*        <p>IBAN: {account.iban}</p>*/}
-                        {/*        <p>Type: {account.type}</p>*/}
-                        {/*    </div>*/}
-                        {/*))}*/}
-                            <div>
-                                <p className={'h5'}>Name: {accountSample.name}</p>
-                                <p className={'h5'}>Balance: {accountSample.formatted_balance}</p>
-                                <p className={'h5'}>IBAN: {accountSample.iban}</p>
-                                <p className={'h5'}>Type: {accountSample.type}</p>
+                        {accounts.map((account) => (
+                            <div key={account.id}>
+                                <p>Name: {account.name}</p>
+                                <p>Balance: {account.formatted_balance}</p>
+                                <p>IBAN: {account.iban}</p>
+                                <p>Type: {account.type}</p>
                             </div>
+                        ))}
+                        {/*    <div>*/}
+                        {/*        <p className={'h5'}>Name: {accountSample.name}</p>*/}
+                        {/*        <p className={'h5'}>Balance: {accountSample.formatted_balance}</p>*/}
+                        {/*        <p className={'h5'}>IBAN: {accountSample.iban}</p>*/}
+                        {/*        <p className={'h5'}>Type: {accountSample.type}</p>*/}
+                        {/*    </div>*/}
                         <LogoutButton/>
                     </div>
                 ) : (
