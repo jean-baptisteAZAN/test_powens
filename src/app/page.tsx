@@ -55,18 +55,12 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
                         <h2 className={'h2'}>Accounts:</h2>
                         {accounts.map((account) => (
                             <div key={account.id}>
-                                <p>Name: {account.name}</p>
-                                <p>Balance: {account.formatted_balance}</p>
-                                <p>IBAN: {account.iban}</p>
-                                <p>Type: {account.type}</p>
+                                <p className={'h5'}>Name: {account.name}</p>
+                                <p className={'h5'}>Balance: {account.formatted_balance}</p>
+                                <p className={'h5'}>IBAN: {account.iban}</p>
+                                <p className={'h5'}>Type: {account.type}</p>
                             </div>
                         ))}
-                        {/*    <div>*/}
-                        {/*        <p className={'h5'}>Name: {accountSample.name}</p>*/}
-                        {/*        <p className={'h5'}>Balance: {accountSample.formatted_balance}</p>*/}
-                        {/*        <p className={'h5'}>IBAN: {accountSample.iban}</p>*/}
-                        {/*        <p className={'h5'}>Type: {accountSample.type}</p>*/}
-                        {/*    </div>*/}
                         <LogoutButton/>
                     </div>
                 ) : (
