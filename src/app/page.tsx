@@ -51,7 +51,9 @@ export default async function Home({ searchParams }: { searchParams: { code?: st
             <Suspense fallback={<ProgressRing value={null} size="size-14" meterStroke="stroke-tertiary-600-400" trackStroke="stroke-tertiary-50-950" />}>
                 {accounts ? (
                     <div className={'flex flex-col items-center justify-center'}>
-                        <h2 className={'h2'}>Accounts:</h2>
+                        <h2 className={'h2'}>
+                            Vous n'etes pas connecté
+                        </h2>
                         {accounts.map((account) => (
                             <div key={account.id}>
                                 <p className={'h5'}>Name: {account.name}</p>
