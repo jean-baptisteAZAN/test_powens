@@ -7,7 +7,7 @@ export const AppBarMain: React.FC = () => {
         <AppBar>
             <AppBar.Toolbar>
                 <AppBar.ToolbarCenter classes="block">
-                    <h1 className="type-scale-9 font-bold uppercase text-9xl">
+                    <h1 className="type-scale-9 font-bold text-9xl">
                       <span
                           className="bg-gradient-radial from-tertiary-500 to-primary-500 box-decoration-clone bg-clip-text text-transparent">
                         ezBank
@@ -18,3 +18,4 @@ export const AppBarMain: React.FC = () => {
         </AppBar>
     );
 };
+
